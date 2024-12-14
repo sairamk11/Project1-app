@@ -56,6 +56,7 @@ guvi_queries = {
 
 }
 
+my_queries={}
 # Navigation options
 nav = st.sidebar.radio("Select Query Section",["Guvi Queries" , "My Queries"])
 
