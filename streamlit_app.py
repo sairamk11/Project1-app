@@ -1,12 +1,12 @@
 import streamlit as st
-import psycopg2
+import pg8000
 import pandas as pd
 import matplotlib.pyplot as plt
 import plotly.express as px
 
 # Connect to the database
 def create_connection():
-        connection = psycopg2.connect(
+        connection = pg8000.connect(
             host="orders.ch2k6ywge94l.ap-south-1.rds.amazonaws.com",
             database="postgres",
             user="postgres",
