@@ -56,7 +56,86 @@ guvi_queries = {
 
 }
 
-my_queries={}
+my_queries={
+    "1. Top 5 Products with the Highest Quantity of Orders": """
+        SELECT o.product_id, COUNT(o.order_id) AS total_orders
+        FROM orders o
+        GROUP BY o.product_id
+        ORDER BY total_orders DESC
+        LIMIT 5;
+    """,
+
+    "2. Total Revenue by Region": """
+        SELECT o.region, SUM(o.sale_price) AS total_revenue
+        FROM orders o
+        GROUP BY o.region
+        ORDER BY total_revenue DESC;
+    """,
+
+    "3. Product Categories with the Most Orders": """
+        SELECT o.category, COUNT(o.order_id) AS total_orders
+        FROM orders o
+        GROUP BY o.category
+        ORDER BY total_orders DESC;
+    """,
+
+    "4. Average Profit per Order by Region": """
+        SELECT o.region, AVG(o.profit) AS avg_profit
+        FROM orders o
+        GROUP BY o.region
+        ORDER BY avg_profit DESC;
+    """,
+
+    "5. Top 3 Regions with the Most Discounted Sales": """
+        SELECT o.region, SUM(o.discount) AS total_discount
+        FROM orders o
+        WHERE o.discount > 0
+        GROUP BY o.region
+        ORDER BY total_discount DESC
+        LIMIT 3;
+    """,
+
+    "6. Total Profit by Product ID per Year": """
+        SELECT o.product_id, EXTRACT(YEAR FROM order_date::timestamp) AS year, SUM(o.profit) AS total_profit
+        FROM orders o
+        GROUP BY o.product_id, year
+        ORDER BY year, total_profit DESC;
+    """,
+
+    "7. Total Sales by Product Category and Region": """
+        SELECT o.category, o.region, SUM(o.sale_price) AS total_sales
+        FROM orders o
+        GROUP BY o.category, o.region
+        ORDER BY total_sales DESC;
+    """,
+
+    "8. Year-over-Year Profit Growth for Each Region": """
+        SELECT o.region, 
+               EXTRACT(YEAR FROM order_date::timestamp) AS year, 
+               SUM(o.profit) AS total_profit,
+               SUM(o.profit) - LAG(SUM(o.profit)) OVER (PARTITION BY o.region ORDER BY EXTRACT(YEAR FROM order_date::timestamp)) AS profit_growth
+        FROM orders o
+        GROUP BY o.region, year
+        ORDER BY o.region, year;
+    """,
+
+    "9. Top 10 Products with the Highest Discounts": """
+        SELECT o.product_id, SUM(o.discount) AS total_discount
+        FROM orders o
+        GROUP BY o.product_id
+        ORDER BY total_discount DESC
+        LIMIT 10;
+    """,
+
+    "10. Total Revenue by Product ID and Category": """
+        SELECT o.product_id, o.category, SUM(o.sale_price) AS total_revenue
+        FROM orders o
+        GROUP BY o.product_id, o.category
+        ORDER BY total_revenue DESC;
+    """
+}
+
+
 # Navigation options
 nav = st.sidebar.radio("Select Query Section",["Guvi Queries" , "My Queries"])
 
